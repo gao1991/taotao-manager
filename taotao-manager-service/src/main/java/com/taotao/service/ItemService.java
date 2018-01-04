@@ -14,4 +14,7 @@ public interface ItemService {
 	//新增商品
 	TaotaoResult creatItem(TbItem item, String desc, String itemParam) throws Exception ;
 
+	//删除商品
+	TaotaoResult deleteItem(String ids);
+
 }

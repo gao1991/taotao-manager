@@ -2,6 +2,7 @@ package com.taotao.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -30,11 +31,36 @@ public class FTPTest {
 		ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 		//第一个参数：服务器端文档名
 		//第二个参数：上传文档的inputStream
-		ftpClient.storeFile("hello1.jpg", inputStream);
+		ftpClient.storeFile("hello2.jpg", inputStream);
 		//关闭连接
 		ftpClient.logout();
 		
 	}
+	
+	@Test
+	public boolean deleteFile() throws Exception{
+		boolean result = false;
+		//创建一个FtpClient对象
+		FTPClient ftpClient = new FTPClient();
+		//创建ftp连接。默认是21端口
+		ftpClient.connect("192.168.133.128", 21);
+		//登录ftp服务器，使用用户名和密码
+		ftpClient.login("ftpuser", "ftpuser");
+		String filename = "hello1.jpg";
+		String filePath = "/home/ftpuser/www/images";
+        try {
+        	ftpClient.changeWorkingDirectory(filePath);//转移到指定FTP服务器目录
+            filename = new String(filename.getBytes("UTF-8"), "UTF-8");
+            filePath = new String(filePath.getBytes("UTF-8"), "UTF-8");
+            ftpClient.deleteFile(filename);
+            ftpClient.logout();
+            result = true;
+        } catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
 	
 	@Test
 	public void testFtpUtil() throws Exception {

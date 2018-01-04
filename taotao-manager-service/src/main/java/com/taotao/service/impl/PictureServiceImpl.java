@@ -17,14 +17,19 @@ public class PictureServiceImpl implements PictureService {
 
 	@Value("${FTP_ADDRESS}")
 	private String host;
+	
 	@Value("${FTP_PORT}")
 	private Integer port;
+	
 	@Value("${FTP_USERNAME}")
 	private String username;
+	
 	@Value("${FTP_PASSWORD}")
 	private String password;
+	
 	@Value("${FTP_BASE_PATH}")
 	private String basePath;
+	
 	@Value("${IMAGE_BASE_URL}")
 	private String baseUrl;
 	
@@ -56,6 +61,21 @@ public class PictureServiceImpl implements PictureService {
 			resultMap.put("message", "文件上传发生异常！");
 			return resultMap;
 		}
+	}
+	
+	//删除图片
+	public boolean deletePic(String imgName, String imgPath) {
+		boolean result = false;
+		try {
+			result = FtpUtil.deleteFile(host, port, username, password, basePath, imgPath, imgName);
+			if (result) {
+				return result;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+		
 	}
 
 }

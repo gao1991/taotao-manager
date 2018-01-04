@@ -115,6 +115,7 @@
 			if(data.status == 200){
 				$.messager.alert('提示','新增商品成功!');
 			}
+			window.location.href="/";
 		});
 	}
 	

@@ -1,6 +1,7 @@
 package com.taotao.service.impl;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.taotao.pojo.TbItemDesc;
 import com.taotao.pojo.TbItemExample;
 import com.taotao.pojo.TbItemExample.Criteria;
 import com.taotao.pojo.TbItemParamItem;
+import com.taotao.pojo.TbItemParamItemExample;
 import com.taotao.service.ItemService;
 
 @Service
@@ -117,6 +119,42 @@ public class ItemServiceImpl implements ItemService {
 		itemParamItem.setUpdated(new Date());
 		
 		itemParamItemMapper.insert(itemParamItem);
+		return TaotaoResult.ok();
+	}
+
+	@Override
+	public TaotaoResult deleteItem(String ids) {
+		String[] id = ids.split(",");
+		for (int i = 0; i < id.length; i++) {
+			Long itemId = Long.valueOf(id[i]);
+			TbItem item = getItemById(itemId);	//根据商品ID查询商品信息
+			String imageStr = item.getImage();	//获取图片url
+			if (!"".equals(imageStr) && imageStr != null) {
+				String[] imges = imageStr.split(",");	//多张图片进行分割
+				for (int j = 0; j < imges.length; j++) {
+					String[] image = imges[j].split("/");
+					int length = image.length;
+					String imgeName = image[length-1];
+					String imgPath = image[length-2];
+					System.out.println("imgeName="+imgeName+"----imgPath="+imgPath);
+					try {
+						PictureServiceImpl pictureServiceImpl = new PictureServiceImpl();
+						pictureServiceImpl.deletePic(imgeName, imgPath);
+					} catch (Exception e) {
+						e.printStackTrace();
+						return null;
+					}
+					
+				}
+			}
+			
+			itemMapper.deleteByPrimaryKey(itemId);
+			itemDescMapper.deleteByPrimaryKey(itemId);
+			TbItemParamItemExample example = new TbItemParamItemExample();
+			com.taotao.pojo.TbItemParamItemExample.Criteria criteria = example.createCriteria();
+			criteria.andItemIdEqualTo(itemId);
+			itemParamItemMapper.deleteByExample(example);
+		}
 		return TaotaoResult.ok();
 	}
 
