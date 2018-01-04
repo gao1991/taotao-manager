@@ -1,0 +1,8 @@
+.metadata
+target/
+#忽略.class文件
+*.class
+#忽略Eclipse生成的settings文件夹
+.settings/
+#忽略编译文件夹
+classes/

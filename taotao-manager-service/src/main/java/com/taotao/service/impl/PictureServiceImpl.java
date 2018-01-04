@@ -47,7 +47,7 @@ public class PictureServiceImpl implements PictureService {
 			String imgPath = new DateTime().toString("yyyy-MM-dd");
 			boolean result = FtpUtil.uploadFile(host, port, username, password, 
 					basePath, imgPath, newName, file.getInputStream());
-			//返回结果
+			//返回结果  
 			if (!result) {
 				resultMap.put("error", 1);
 				resultMap.put("message", "文件上传失败！");
